@@ -3,7 +3,7 @@ class Car {
     y: number;
     width: number;
     height: number;
-    meter: IMeter;
+    unit: IUnit;
     controls: Controls;
     angle: number;
     img;
@@ -12,8 +12,8 @@ class Car {
         this.y = y;
         this.width = width;
         this.height = height;
-        this.angle = 0
-        this.meter = { acceleration: 0.2, velocity: 0, friction: 0.05, topSpeed: topspeed };
+        this.angle = 0;
+        this.unit = { acceleration: 0.2, velocity: 0, friction: 0.05, topSpeed: topspeed };
         this.controls = new Controls();
 
         this.img = new Image();
@@ -22,25 +22,34 @@ class Car {
 
     drive() {
         if (this.controls.forwards) {
-            this.meter.velocity += this.meter.acceleration;
+            this.unit.velocity += this.unit.acceleration;
         }
         if (this.controls.backwards) {
-            this.meter.velocity -= this.meter.acceleration;
+            this.unit.velocity -= this.unit.acceleration;
         }
-        if (this.meter.velocity > this.meter.topSpeed) {
-            this.meter.velocity = this.meter.topSpeed;
+
+        if (this.controls.break) {
+            this.unit.friction = 0.15;
         }
-        if (this.meter.velocity < -this.meter.topSpeed / 2) {
-            this.meter.velocity = -this.meter.topSpeed / 2;
+        if (!this.controls.break) {
+            this.unit.friction = 0.05;
         }
-        if (this.meter.velocity > 0) {
-            this.meter.velocity -= this.meter.friction;
+
+        if (this.unit.velocity > this.unit.topSpeed) {
+            this.unit.velocity = this.unit.topSpeed;
         }
-        if (this.meter.velocity < 0) {
-            this.meter.velocity += this.meter.friction;
+        if (this.unit.velocity < -this.unit.topSpeed / 2) {
+            this.unit.velocity = -this.unit.topSpeed / 2;
         }
-        if (Math.abs(this.meter.velocity) < this.meter.friction) {
-            this.meter.velocity = 0;
+
+        if (this.unit.velocity > 0) {
+            this.unit.velocity -= this.unit.friction;
+        }
+        if (this.unit.velocity < 0) {
+            this.unit.velocity += this.unit.friction;
+        }
+        if (Math.abs(this.unit.velocity) < this.unit.friction) {
+            this.unit.velocity = 0;
         }
 
         if (this.controls.left) {
@@ -49,7 +58,7 @@ class Car {
         if (this.controls.right) {
             this.angle -= 0.02;
         }
-        this.y -= this.meter.velocity;
+        this.y -= this.unit.velocity;
     }
 
     draw(ctx: CanvasRenderingContext2D) {

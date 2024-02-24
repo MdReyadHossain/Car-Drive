@@ -3,11 +3,13 @@ class Controls {
     backwards: boolean;
     left: boolean;
     right: boolean;
+    break: boolean;
     constructor() {
         this.forwards = false;
         this.backwards = false;
         this.left = false;
         this.right = false;
+        this.break = false;
 
         this.#keyBoardEvent();
     }
@@ -36,6 +38,9 @@ class Controls {
                 this.right = true;
                 break;
         }
+        if (e.code === 'Space') {
+            this.break = true;
+        }
     }
 
     #keyUpEvent(e: KeyboardEvent) {
@@ -52,6 +57,9 @@ class Controls {
             case 'ArrowRight':
                 this.right = false;
                 break;
+        }
+        if (e.code === 'Space') {
+            this.break = false;
         }
     }
 }

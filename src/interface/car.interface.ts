@@ -1,4 +1,4 @@
-interface IMeter {
+interface IUnit {
     acceleration: number,
     velocity: number,
     topSpeed: number,
