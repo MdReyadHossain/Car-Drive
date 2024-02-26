@@ -4,6 +4,7 @@ class Controls {
     this.backwards = false;
     this.left = false;
     this.right = false;
+    this.break = false;
     this.#keyBoardEvent();
   }
   #keyBoardEvent() {
@@ -29,6 +30,9 @@ class Controls {
         this.right = true;
         break;
     }
+    if (e.code === "Space") {
+      this.break = true;
+    }
   }
   #keyUpEvent(e) {
     switch (e.key) {
@@ -44,6 +48,9 @@ class Controls {
       case "ArrowRight":
         this.right = false;
         break;
+    }
+    if (e.code === "Space") {
+      this.break = false;
     }
   }
 }

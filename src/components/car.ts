@@ -4,42 +4,44 @@ class Car {
     width: number;
     height: number;
     unit: IUnit;
+    specs: ISpecification;
     controls: Controls;
     angle: number;
     img;
-    constructor(x: number, y: number, width: number, height: number, { topspeed = 0 } = {}) {
+    constructor(x: number, y: number, width: number, height: number, { acceleration = 0, breaking = 0, topspeed = 0, model = '' } = {}) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.angle = 0;
-        this.unit = { acceleration: 0.2, velocity: 0, friction: 0.05, topSpeed: topspeed };
+        this.specs = { acceleration: acceleration, topSpeed: topspeed, breaking: breaking };
+        this.unit = { velocity: 0, friction: 0.05, };
         this.controls = new Controls();
 
         this.img = new Image();
-        this.img.src = '/assets/bmw.png';
+        this.img.src = model;
     }
 
     drive() {
         if (this.controls.forwards) {
-            this.unit.velocity += this.unit.acceleration;
+            this.unit.velocity += this.specs.acceleration;
         }
         if (this.controls.backwards) {
-            this.unit.velocity -= this.unit.acceleration;
+            this.unit.velocity -= this.specs.acceleration;
         }
 
         if (this.controls.break) {
-            this.unit.friction = 0.15;
+            this.unit.friction = this.specs.breaking;
         }
         if (!this.controls.break) {
             this.unit.friction = 0.05;
         }
 
-        if (this.unit.velocity > this.unit.topSpeed) {
-            this.unit.velocity = this.unit.topSpeed;
+        if (this.unit.velocity > this.specs.topSpeed) {
+            this.unit.velocity = this.specs.topSpeed;
         }
-        if (this.unit.velocity < -this.unit.topSpeed / 2) {
-            this.unit.velocity = -this.unit.topSpeed / 2;
+        if (this.unit.velocity < -this.specs.topSpeed / 2) {
+            this.unit.velocity = -this.specs.topSpeed / 2;
         }
 
         if (this.unit.velocity > 0) {
@@ -58,7 +60,15 @@ class Car {
         if (this.controls.right) {
             this.angle -= 0.02;
         }
+
+        if (this.y < 0 + this.width) {
+            this.unit.velocity = -1;
+        }
+        else if ((window.innerHeight - 170) - this.width < this.y) {
+            this.unit.velocity = 1;
+        }
         this.y -= this.unit.velocity;
+        console.log(this.y);
     }
 
     draw(ctx: CanvasRenderingContext2D) {

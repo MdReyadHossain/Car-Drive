@@ -1,6 +1,10 @@
 interface IUnit {
-    acceleration: number,
     velocity: number,
-    topSpeed: number,
     friction: number,
+}
+
+interface ISpecification {
+    topSpeed: number,
+    breaking: number,
+    acceleration: number,
 }
