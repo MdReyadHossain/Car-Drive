@@ -39,19 +39,21 @@ class Car {
     if (Math.abs(this.unit.velocity) < this.unit.friction) {
       this.unit.velocity = 0;
     }
-    if (this.controls.left) {
-      this.angle += 0.02;
+    if (this.unit.velocity != 0) {
+      const flip = this.unit.velocity > 1 ? 1 : this.unit.velocity < -1 ? -1 : 0;
+      if (this.controls.left) {
+        this.angle += 0.02 * flip;
+      }
+      if (this.controls.right) {
+        this.angle -= 0.02 * flip;
+      }
     }
-    if (this.controls.right) {
-      this.angle -= 0.02;
-    }
-    if (this.y < 0 + this.width) {
-      this.unit.velocity = -1;
-    } else if (window.innerHeight - 170 - this.width < this.y) {
-      this.unit.velocity = 1;
-    }
-    this.y -= this.unit.velocity;
-    console.log(this.y);
+    this.x -= Math.sin(this.angle) * this.unit.velocity;
+    this.y -= Math.cos(this.angle) * this.unit.velocity;
+    console.log("x = ", this.x);
+    console.log("y = ", this.y);
+    console.log("angle = ", this.angle);
+    console.log("velocity = ", this.unit.velocity);
   }
   draw(ctx) {
     ctx.save();
